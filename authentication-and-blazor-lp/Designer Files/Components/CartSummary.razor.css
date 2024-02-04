@@ -1,0 +1,13 @@
+﻿div {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+h4 {
+   margin-bottom:0;
+}
+
+p {
+    margin: 0 0 0 1rem;
+}

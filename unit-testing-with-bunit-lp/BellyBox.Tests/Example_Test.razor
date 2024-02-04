@@ -1,0 +1,15 @@
+﻿@inherits TestContext
+
+@code
+{
+    [Fact]
+    public void CanTestExampleComponent()
+    {
+        // Arrange
+        var cut = Render(@<Example/>);
+        // Act
+        // ... (as needed)
+        // Assert
+        cut.MarkupMatches(@<h3>Example</h3>);
+    }
+}

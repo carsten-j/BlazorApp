@@ -1,0 +1,69 @@
+﻿@inject IBellyBoxDataService _service
+
+@page "/meal/{Id:int}"
+
+<div>
+	@if (hasErrors || meal == null)
+	{
+		<Alert Status="Alert.AlertStatus.Danger">
+			<p>The product you're looking for could not be retreived.</p>
+	    </Alert>
+	}
+	else
+	{
+		<article>
+			<img src="@meal.ImageUrl" />
+			<div>
+				<h2>@meal.Name</h2>
+				<p class="description">
+					@meal.Description
+				</p>
+				<h2>Ingredients</h2>
+				<ul>
+					@foreach (Ingredient ingredient in meal.Ingredients)
+					{
+						<li>@ingredient.Name</li>
+					}
+				</ul>
+				<h3>Nutrition per serving</h3>
+				<p class="calories">
+					<span>Calories</span>
+					<span>@meal.Calories Cal</span>
+				</p>
+				<p class="servings">
+					<span>Servings</span>
+					<span>@meal.Servings</span>
+				</p>
+				<h4>Sensitivities</h4>
+				<div class="sensitivities">
+					@foreach (Tag tag in meal.Tags)
+					{
+						<Pill Text="@tag.Text" />
+					}
+				</div>
+			</div>
+		</article>
+	}
+
+</div>
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	Meal meal;
+
+	bool hasErrors;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			meal = await _service.GetMealById(Id);
+		}
+		catch
+		{
+			hasErrors = true;
+		}
+	}
+}

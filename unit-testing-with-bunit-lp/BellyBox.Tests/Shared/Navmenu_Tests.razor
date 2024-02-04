@@ -1,0 +1,16 @@
+﻿@inherits TestContext
+
+@code
+{
+    [Fact]
+    public void Navmenu_Test()
+    {
+        using var ctx = new TestContext();
+
+        ctx.ComponentFactories.AddStub<NavLink>("HOME");
+
+        var cut = ctx.Render(@<NavMenu></NavMenu>);
+
+        cut.MarkupMatches(@<nav><ul><li>HOME</li></ul></nav>);
+    }
+}

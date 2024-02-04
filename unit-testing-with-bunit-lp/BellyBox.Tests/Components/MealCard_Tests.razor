@@ -1,0 +1,22 @@
+﻿@using AutoFixture.Xunit2
+@inherits TestContext
+
+@code
+{
+
+    [Theory, AutoData]
+    public void MealCard_Test(BellyBox.Shared.Meal item)
+    {
+        var cut = Render(@<MealCard Item="item"></MealCard>);
+
+        var card = cut.FindComponent<Card>().Instance;
+
+        card.Title.Should().Be(item.Name);
+        card.Image.Should().Be(item.ThumbnailUrl);
+        card.Url.Should().Be($"/meal/{item.Id}");
+
+        var tagList = cut.FindComponent<TagList>().Instance;
+
+        tagList.Tags.Should().BeEquivalentTo(item.Tags);
+    }
+}

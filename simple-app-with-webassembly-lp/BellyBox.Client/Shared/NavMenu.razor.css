@@ -1,0 +1,40 @@
+ul {
+    padding: 0;
+    margin: 1rem 0;
+    display: flex;
+    gap: 1rem;
+}
+
+li {
+    list-style: none;
+}
+
+.cart-count {
+    display: inline-block;
+    padding: .25em .4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25rem;
+    background-color: red;
+    left: -12px;
+    top: -12px;
+    position:relative;
+}
+
+::deep a.nav-link {
+    color:white;
+    padding: 10px;
+    text-decoration:none;
+}
+
+    ::deep a.nav-link:hover, ::deep a.nav-link.active {
+        background-color: white;
+        color: #004e36;
+        padding: 10px;
+        border-radius: 5px;
+    }
+}

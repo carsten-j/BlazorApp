@@ -1,0 +1,35 @@
+﻿@inherits LayoutComponentBase
+
+@inject ICartDataService CartService
+
+<CascadingValue Value="CustomerCart">
+    <main>
+       <header>
+           <h1>BellyBox</h1>
+           <!-- Navigation -->
+           <NavMenu />
+       </header>
+       <section class="content">
+            @Body
+       </section>
+       <footer>
+           <p>BellyBox &copy;</p>
+       </footer>
+    </main>
+</CascadingValue>
+
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        CustomerCart = new CartState();
+
+        var cart = await CartService.CreateCart();
+
+        CustomerCart.SetState(cart);
+
+        await base.OnInitializedAsync();   
+    }
+
+    public CartState CustomerCart { get; set; }
+}

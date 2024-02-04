@@ -1,0 +1,10 @@
+﻿<Card Title="@Item.Name" Image="@Item.ThumbnailUrl" Url="@Url">
+    <TagList Tags="Item.Tags"> </TagList>
+</Card>
+
+@code
+{
+    [Parameter] public Meal Item { get; set; }
+
+    public string Url => $"/meal/{Item.Id}";
+}

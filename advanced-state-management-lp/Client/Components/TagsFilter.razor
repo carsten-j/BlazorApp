@@ -1,0 +1,37 @@
+﻿<ul>
+   @foreach (var t in Tags)
+   {
+	<li>
+		<input type="checkbox" id="@t.Id" 
+		       @onchange="@(_=> HandleChange(t))"
+			   checked="@SelectedFilters.Contains(t)"/>
+		<label for="@t.Id">@t.Text</label>
+	</li>	   
+   }
+</ul>
+
+@code {
+	[Parameter]
+	public IEnumerable<Tag> Tags { get; set; }
+
+	[Parameter]
+	public EventCallback<List<Tag>> SelectedFiltersChanged { get; set; }
+
+	[Parameter]
+	public List<Tag> SelectedFilters { get; set; } = new();
+
+    void HandleChange(Tag tag)
+	{
+		List<Tag> temp = new(SelectedFilters);
+		if (temp.Contains(tag))
+		{
+			temp.Remove(tag);
+		}
+		else
+		{
+			temp.Add(tag);
+		}
+		SelectedFiltersChanged.InvokeAsync(temp);
+	}
+
+}

@@ -1,0 +1,20 @@
+﻿@inherits TestContext
+@using BellyBox.Client.Shared
+
+@code {
+    [Fact(DisplayName = "NavMenu renders correctly")]
+    public void NavMenuShouldRender()
+    {
+        var cut = Render(@<NavMenu/>);
+        cut.MarkupMatches(
+            @<nav>
+                <ul>
+                    <li>
+                        <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                            Home
+                        </NavLink>
+                    </li>
+                </ul>
+            </nav>);
+    }
+}

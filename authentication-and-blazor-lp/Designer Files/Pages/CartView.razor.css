@@ -1,0 +1,8 @@
+﻿h3 {
+    grid-row: 1/-1;
+}
+div {
+    display: grid;
+    grid-template-columns: 8fr 4fr;
+    gap: 2rem;
+}

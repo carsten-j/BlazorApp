@@ -1,0 +1,27 @@
+﻿@inherits TestContext
+@using BellyBox.Shared
+@code {
+    
+	[Fact(DisplayName = "MealListView empty state rendered when data is empty")]
+	public void MealListViewShouldRenderEmptyState()
+	{
+		List<Meal> emptyData = new();
+		var cut = Render(@<MealListView Data="emptyData"/>);
+		cut.MarkupMatches(@<div>
+								<div class="grid">
+								   <MealListViewNoRecords Show="true"/>
+								</div>
+						   </div>);
+	}
+
+	[Fact(DisplayName = "MealListView binds data to meal cards")]
+	public void MealListViewShouldBindMealCards()
+	{
+
+		var meals = MealViewData.GetFakeMeals(3);
+		var cut = Render( @<MealListView Data="meals" /> );
+		var renderedCards = cut.FindComponents<MealCard>();
+		renderedCards.Count().Should().Be(3);
+		renderedCards.Select(c => c.Instance.Item).Should().BeEquivalentTo(meals);
+	}
+}

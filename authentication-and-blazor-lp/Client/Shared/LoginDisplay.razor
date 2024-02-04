@@ -1,0 +1,8 @@
+﻿<AuthorizeView Context="authenticationState">
+    <Authorized>
+        <a class="nav-link" href="authentication/profile">@authenticationState.User.Identity?.Name</a>
+    </Authorized> 
+    <NotAuthorized>
+        <a class="nav-link" href="authentication/login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>

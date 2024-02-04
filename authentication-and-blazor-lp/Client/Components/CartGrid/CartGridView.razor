@@ -1,0 +1,32 @@
+﻿<div>
+    <EditForm Model="Data">
+        <DataAnnotationsValidator />
+        <Grid Data="Data" Context="item">
+            <Header>
+                <CartGridViewHeader />
+            </Header>
+            <Rows>
+                <CartGridViewRow Item="item"
+                                 OnCartRemoveItem="HandleCartRemoveItem"
+                                 OnCartUpdateQuantity="HandleCartUpdateQuantity" />
+            </Rows>
+            <NoRecordsContent>
+                <CartGridViewNoRecords />
+            </NoRecordsContent>
+        </Grid>
+    </EditForm>
+</div>
+
+@code {
+
+    [Parameter]
+    public IEnumerable<CartItem> Data { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<int> OnCartRemoveItem { get; set; }
+    void HandleCartRemoveItem(int itemId) => OnCartRemoveItem.InvokeAsync(itemId);
+
+    [Parameter]
+    public EventCallback<CartItem> OnCartUpdateQuantity { get; set; }
+    void HandleCartUpdateQuantity(CartItem item) => OnCartUpdateQuantity.InvokeAsync(item);
+}

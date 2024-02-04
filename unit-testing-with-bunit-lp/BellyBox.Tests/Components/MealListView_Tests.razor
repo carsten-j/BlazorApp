@@ -1,0 +1,46 @@
+﻿@using AutoFixture.Xunit2
+@using BellyBox.Shared
+ 
+@inherits TestContext
+
+@code
+{
+    [Fact]
+    public void MealListView_Test()
+    {
+        List<Meal> meals = new();
+
+        var cut = Render(@<MealListView Data="@meals"></MealListView>);
+
+        cut.MarkupMatches(@"<div >
+                              <div class=""grid"" >
+                                <div class=""no-records"" >
+                                  <div class=""info"" >
+                                    <span >Sorry, no meals are available for these filters.</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>");
+    }
+
+    [Fact]
+    public void MealListView_FakeDataTest()
+    {
+        int numberOfMeals = 3;
+
+        var meals = BellyBox.Tests.Fakes.MealViewData.GetFakeMeals(numberOfMeals);
+
+        var cut = Render(@<MealListView Data="@meals"></MealListView>);
+
+        var mealCards = cut.FindComponents<MealCard>();
+
+        mealCards.Count().Should().Be(numberOfMeals);
+
+        int index = 0;
+        foreach (var mealCard in mealCards)
+        {
+            mealCard.Instance.Item.Should().BeEquivalentTo(meals[index]);
+            index++;
+        }
+    }
+}

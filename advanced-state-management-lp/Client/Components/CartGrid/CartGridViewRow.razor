@@ -1,0 +1,48 @@
+﻿<td>
+    <button type="button" @onclick="() => HandleCartRemoveItem(Item.Id)" title="Remove this item" aria-label="Remove this item" class="cart-delete">&times;</button>
+</td>
+<td>
+    <img class="meal-thumbnail" src="@Item.Meal.ThumbnailUrl"/>
+</td>
+<td>
+    <h4>
+        <a href="/meal/{id}">@Item.Meal.Name</a>
+    </h4>
+</td>
+<td>
+    <div class="actions">
+        <label style="display:none;" for="@Item.Id">@($"{Item.Meal.Name} quantity")</label>
+        <ValidationMessage For="@(() => Item.Quantity)"></ValidationMessage>
+        <InputNumber ValueChanged="@(value =>HandleCartUpdateQuantity(value, Item))"
+                     TValue="int"
+                     ValueExpression="@(() => Item.Quantity)"
+                     Value="@Item.Quantity"
+                     id="@Item.Id"
+                     min="1" />
+    </div>
+</td>
+<td>
+    <span>@((Item.Quantity * Item.BasePrice).ToString("C2", new CultureInfo("en-US")))</span>
+</td>
+
+@code {
+    [Parameter]
+    public CartItem Item { get; set; }
+
+    [Parameter]
+    public Action<int>? OnCartRemoveItem { get; set; }
+
+    [Parameter]
+    public Action<CartItem>? OnCartUpdateQuantity { get; set; }
+
+    private void HandleCartRemoveItem(int itemId)
+    {
+        OnCartRemoveItem.Invoke(itemId);
+    }
+
+    private void HandleCartUpdateQuantity(int value, CartItem item)
+    {
+        item.Quantity = value;
+        OnCartUpdateQuantity.Invoke(item);
+    }
+}

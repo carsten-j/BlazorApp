@@ -1,0 +1,23 @@
+﻿@using BellyBox.Client.Services
+@if (CustomerCart.Items.Values.Any(ci => ci.Meal.Id == Meal.Id))
+{
+    <Alert Status="Alert.AlertStatus.Info">
+        <p>This item is in your <a href="/cart">cart</a>.</p>
+    </Alert>
+}
+<button @onclick="@(_ => HandleAddToCart(Meal))" class="primary">Add to cart</button>
+
+@code {
+
+    [CascadingParameter]
+    public CartState CustomerCart { get; set; } = null!;
+
+    [Parameter, EditorRequired]
+    public Meal Meal { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<Meal> OnAddToCart { get; set; }
+
+    private void HandleAddToCart(Meal meal) => OnAddToCart.InvokeAsync(meal);
+
+}

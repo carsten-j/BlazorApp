@@ -1,0 +1,17 @@
+﻿@inherits TestContext
+
+@code
+{
+    [Theory]
+    [InlineData(true, "Sorry, no meals are available for these filters.")]
+    [InlineData(false, "")]
+    public void MealListViewNoRecords_StyleTest(bool show, string expected)
+    {
+        var cut = Render(@<MealListViewNoRecords Show="@show"></MealListViewNoRecords>);
+
+        if (show)
+            cut.Find("span").TextContent.Should().Be(expected);
+        else
+            cut.MarkupMatches(expected);
+    }
+}

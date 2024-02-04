@@ -1,0 +1,59 @@
+﻿@using BellyBox.Client.Services
+@inject ICartDataService CartService
+@inject ILocalStorageService LocalStorage
+@inherits LayoutComponentBase
+
+<CascadingValue Value="CustomerCart">
+    <main>
+        <header>
+            <h1>BellyBox</h1>
+            <!-- Navigation -->
+            <NavMenu />
+        </header>
+        <section class="content">
+            @Body
+        </section>
+        <footer>
+            <p>BellyBox &copy;</p>
+        </footer>
+    </main>
+</CascadingValue>
+
+@code {
+    CartState CustomerCart = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        Cart cart;
+        if (firstRender && CustomerCart.OwnerId == Guid.Empty)
+        {
+            var guid = await LocalStorage.GetItem("CustomerCart.OwnerId");
+            if (guid == Guid.Empty)
+            {
+                cart = await InitializeCart();
+            }
+            else
+            {
+                try
+                {
+                    cart = await CartService.GetCart(guid);
+                }
+                catch
+                {
+                    throw new Exception("Something went wrong while creating a new shopping cart");
+                }
+            }
+            CustomerCart.SetState(cart);
+            StateHasChanged();
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    async Task<Cart> InitializeCart()
+    {
+        var cart = await CartService.CreateCart();
+        await LocalStorage.SetItem("CustomerCart.OwnerId", cart.OwnerId);
+        return cart;
+    }
+}

@@ -1,0 +1,40 @@
+﻿@typeparam TItem
+@if (Data == null || !Data.Any())
+{
+    if (NoRecordsContent != null)
+    {
+        @NoRecordsContent
+    }
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                @Header
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Data)
+            {
+                <tr>
+                    @Rows(item)
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public RenderFragment Header { get; set; } = null!;
+
+    [Parameter, EditorRequired]
+    public RenderFragment<TItem> Rows { get; set; } = null!;
+
+    [Parameter]
+    public RenderFragment? NoRecordsContent { get; set; }
+
+    [Parameter, EditorRequired]
+    public IEnumerable<TItem>? Data { get; set; }
+}

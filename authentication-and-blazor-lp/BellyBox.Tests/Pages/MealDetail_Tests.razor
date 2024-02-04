@@ -1,0 +1,79 @@
+﻿@using BellyBox.Client.Services
+@using BellyBox.Client.Pages
+@using BellyBox.Shared
+@using Telerik.JustMock
+@using AutoFixture.Xunit2
+@inherits TestContext
+@code {
+	IBellyBoxDataService _mockBellyBoxService;
+
+	public MealDetail_Tests()
+	{
+		_mockBellyBoxService = Mock.Create<IBellyBoxDataService>();
+		Services.AddSingleton(_mockBellyBoxService);
+
+	}
+
+	[Fact(DisplayName ="MealDetails renders not found message")]
+	public void MealDetailsShouldRenderNotFoundMessage()
+	{
+		Mock.Arrange(() => _mockBellyBoxService.GetMealById(Arg.AnyInt))
+		.Throws(new Exception());
+
+		var cut = Render(@<MealDetail Id="Arg.AnyInt" />);
+
+		cut.MarkupMatches(
+			@<div>
+				<Alert Status="Alert.AlertStatus.Danger">
+					<p>The product you're looking for could not be retreived.</p>
+				</Alert>
+		     </div>
+	);
+	}
+
+	[Theory(DisplayName ="MealDetail renders data from meal"), AutoData]
+	public void MeailDetailShouldRenderDataFromMeal(Meal meal)
+	{
+		Mock.Arrange(() => _mockBellyBoxService.GetMealById(Arg.AnyInt))
+			.Returns(Task.FromResult(meal));
+
+		var cut = Render(@<MealDetail Id="Arg.AnyInt" />);
+
+		cut.MarkupMatches(
+			@<div>
+				<article>
+					<img src="@meal.ImageUrl" />
+					<div>
+						<h2>@meal.Name</h2>
+						<p class="description">
+							@meal.Description
+						</p>
+						<h2>Ingredients</h2>
+						<ul>
+							@foreach (Ingredient ingredient in meal.Ingredients)
+								{
+									<li>@ingredient.Name</li>
+								}
+							</ul>
+							<h3>Nutrition per serving</h3>
+							<p class="calories">
+								<span>Calories</span>
+								<span>@meal.Calories Cal</span>
+							</p>
+							<p class="servings">
+								<span>Servings</span>
+								<span>@meal.Servings</span>
+							</p>
+							<h4>Sensitivities</h4>
+							<div class="sensitivities">
+								@foreach (Tag tag in meal.Tags)
+								{
+									<Pill Text="@tag.Text" />
+								}
+							</div>
+						</div>
+					</article>
+				</div>
+	);
+	}
+}

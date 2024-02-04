@@ -1,0 +1,14 @@
+﻿	<div>
+	<div class="grid">
+		<MealListViewNoRecords Show="!Data.Any()" />
+		@foreach (var meal in Data)
+		{
+			<MealCard Item="meal" />
+		}
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public IEnumerable<Meal> Data { get; set; }
+}

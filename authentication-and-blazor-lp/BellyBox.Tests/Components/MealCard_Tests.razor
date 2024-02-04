@@ -1,0 +1,23 @@
+﻿@inherits TestContext
+@using AutoFixture.Xunit2
+@using BellyBox.Shared
+@code {
+
+	[Theory(DisplayName ="MealCard renders model properties"), AutoData]
+	public void MealCardShouldRenderModelProperties(Meal meal)
+	{
+		var cut = Render( @<MealCard Item="meal"/> );
+
+		var card = cut.FindComponent<Card>();
+		var cardInstance = card.Instance;
+
+		cardInstance.Title.Should().Be(meal.Name);
+		cardInstance.Url.Should().Be($"/meal/{meal.Id}");
+		cardInstance.Image.Should().Be(meal.ThumbnailUrl);
+
+		card.FindComponent<TagList>()
+			.Instance.Tags.Should().BeEquivalentTo(meal.Tags);
+
+	}
+
+}

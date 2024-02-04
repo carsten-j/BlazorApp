@@ -1,0 +1,22 @@
+﻿@inherits TestContext
+@code {
+
+    [Fact(DisplayName = "Alert renders with child content")]
+    public void AlertShouldRenderChildContent()
+    {
+        var cut = Render(@<Alert><span>Some Child Content</span></Alert>);
+        cut.MarkupMatches(@<div class="info"><span>Some Child Content</span></div>
+    );
+    }
+
+    [Theory(DisplayName = "Alert renders status class")]
+    [InlineData(Alert.AlertStatus.Info, "info")]
+    [InlineData(Alert.AlertStatus.Danger, "danger")]
+    [InlineData(Alert.AlertStatus.Warning, "warning")]
+    public void AlertShouldRenderStatusClass(Alert.AlertStatus status, string expectedStatus)
+    {
+        var cut = Render(@<Alert Status="status"/>);
+        cut.Find("div").GetAttribute("class").Should().Be(expectedStatus);
+
+    }
+}

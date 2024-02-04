@@ -1,0 +1,71 @@
+﻿@page "/"
+
+@inject HttpClient _http;
+@inject MealListState State; 
+
+@if (State.Meals is null && State.Tags is null)
+{
+    <div>
+        Waiting for data
+    </div>
+}
+else
+{
+    <div>
+        <h1>
+            Our Meals
+        </h1>
+
+        <section>
+            <h2>
+                Filter
+            </h2>
+            <TagsFilter Tags="@State.Tags" @bind-SelectedFilters="@State.SelectedTags">
+            </TagsFilter>
+        </section>
+        <section>
+            <MealListView Data="@(FilteredMeals as IEnumerable<Meal>)">
+            </MealListView>
+        </section>
+    </div>
+}
+
+
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        if (State.Meals is null)
+            State.Meals = await _http.GetFromJsonAsync<List<Meal>>("api/meals");
+        if (State.Tags is null)
+            State.Tags = await _http.GetFromJsonAsync<List<Tag>>("api/meals/tags");
+        if (State.SelectedTags is null)
+            State.SelectedTags = new List<Tag>();
+
+        await base.OnInitializedAsync();
+    }
+
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+    }
+
+    private IEnumerable<Meal> FilteredMeals
+    {
+        get
+        {
+            if (State.SelectedTags is null || State.SelectedTags.Count == 0)
+                return State.Meals;
+
+            var res = new List<Meal>();
+
+            foreach (var meal in State.Meals)
+            {
+                if (meal.Tags.ToList().ContainsAll(State.SelectedTags, p => p.Id))
+                    res.Add(meal);
+            }
+            return res;
+        }
+    }
+}

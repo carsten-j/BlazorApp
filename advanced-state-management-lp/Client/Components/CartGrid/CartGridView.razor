@@ -1,0 +1,42 @@
+﻿<div>
+    <EditForm Model="Data">
+        <DataAnnotationsValidator/>
+            <Grid Data="Data" Context="item">
+                <NoRecordsContent>
+                    <CartGridViewNoRecords>
+                    </CartGridViewNoRecords>
+                </NoRecordsContent>
+                <Header>
+                    <CartGridViewHeader>
+                    </CartGridViewHeader>
+                </Header>
+                <Rows>
+                    <CartGridViewRow Item="@item"
+                                     OnCartRemoveItem="@(async itemId => await HandleCartRemoveItem(itemId))"
+                                     OnCartUpdateQuantity="@(async item => await HandleCartUpdateQuantity(item))">
+                    </CartGridViewRow>
+                </Rows>
+            </Grid>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<CartItem> Data { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnCartRemoveItem { get; set; }
+
+    [Parameter]
+    public EventCallback<CartItem> OnCartUpdateQuantity { get; set; }        
+
+    private async Task HandleCartRemoveItem(int itemId)
+    {
+        await OnCartRemoveItem.InvokeAsync(itemId);
+    }
+
+    private async Task HandleCartUpdateQuantity(CartItem item)
+    {
+        await OnCartUpdateQuantity.InvokeAsync(item);
+    }
+}

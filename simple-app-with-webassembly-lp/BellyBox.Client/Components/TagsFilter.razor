@@ -1,0 +1,45 @@
+﻿<ul>
+    @foreach (var tag in Tags)
+    {
+        <li>
+            <input type="checkbox" id="@tag.Id" checked="@boxes[tag.Id]" @onchange="@(_ =>HandleChange(tag))"/>
+            <label for="@tag.Id">@tag.Text</label>
+        </li>
+    }
+</ul>
+
+@code
+{
+    [Parameter] public IEnumerable<Tag> Tags { get; set; }
+    [Parameter] public List<Tag> SelectedFilters { get; set; } = new List<Tag>();
+    [Parameter] public EventCallback<List<Tag>> SelectedFiltersChanged { get; set; }
+
+    private Dictionary<int, bool> boxes = new Dictionary<int, bool>();
+
+    protected override void OnParametersSet()
+    {
+        foreach (var tag in Tags)
+            boxes[tag.Id] = false;
+
+        foreach (var filter in SelectedFilters)
+            boxes[filter.Id] = true;
+
+        base.OnParametersSet();
+    }
+
+    private void HandleChange(Tag tag)
+    {
+        var temp = SelectedFilters;
+
+        if (temp.Contains(tag))
+        {
+            temp.Remove(tag);
+        }
+        else
+        {
+            temp.Add(tag);
+        }
+
+        SelectedFiltersChanged.InvokeAsync(temp);
+    }
+}

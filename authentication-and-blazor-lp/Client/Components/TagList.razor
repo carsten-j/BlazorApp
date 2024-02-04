@@ -1,0 +1,9 @@
+﻿<div class="tags">
+	@foreach(Tag tag in Tags) {
+		<Pill Text="@tag.Text"/>
+	}
+</div>
+@code {
+	[Parameter]
+	public IEnumerable<Tag> Tags { get; set; }
+}

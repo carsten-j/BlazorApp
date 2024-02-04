@@ -1,0 +1,49 @@
+﻿@using BellyBox.Client.Services
+@using BellyBox.Client.Pages
+@using BellyBox.Shared
+@using Telerik.JustMock
+@inherits TestContext
+@code {
+
+	IBellyBoxDataService _mockBellyBoxService;
+
+	public MealList_Tests()
+	{
+		_mockBellyBoxService = Mock.Create<IBellyBoxDataService>();
+		var fakeMeals = MealViewData.GetFakeMeals(4);
+		var fakeTags = MealViewData.GetFakeTags(1,5);
+		
+		Mock.Arrange(() => _mockBellyBoxService.GetMeals())
+		.Returns(Task.FromResult(fakeMeals));		
+		
+		Mock.Arrange(() => _mockBellyBoxService.GetTags())
+		.Returns(Task.FromResult(fakeTags));
+				
+		Services.AddSingleton(_mockBellyBoxService);	
+		Services.AddScoped<MealsListState>();
+	}
+
+	[Fact(DisplayName = "MealViewData filter is applied to meal list")]
+	public void MealViewDataShouldFilterMeals()
+	{
+		var cut = Render( @<MealsList/>	);
+		var mealListViewInstance = cut.FindComponent<MealListView>().Instance;
+		cut.FindComponent<TagsFilter>().Instance.Tags.Count().Should().Be(5);
+		
+		mealListViewInstance.Data.Count().Should().Be(4);
+		
+		cut.Find("input[id=2]").Change(new());
+		mealListViewInstance.Data.Count().Should().Be(2);
+
+		cut.Find("input[id=3]").Change(new());
+		mealListViewInstance.Data.Count().Should().Be(1);
+
+		cut.Find("input[id=4]").Change(new());
+		mealListViewInstance.Data.Count().Should().Be(0);
+
+		Mock.Assert( ()=> _mockBellyBoxService.GetMeals(), Occurs.Once());
+		Mock.Assert( ()=> _mockBellyBoxService.GetTags(), Occurs.Once());
+	}
+
+	}
+}

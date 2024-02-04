@@ -1,0 +1,28 @@
+﻿@inject IBellyBoxDataService BellyBoxData
+@inject MealsListState State
+@page "/"
+
+<div>
+	<h1>Our Meals</h1>
+	<selction>
+		<h2>Filter</h2>
+		<TagsFilter Tags="State.Tags" @bind-SelectedFilters="State.SelectedTags"/>
+	</selction>
+	<section>
+		<MealListView Data="FilteredMeals" />
+	</section>
+</div>
+@code {
+
+	IEnumerable<Meal> FilteredMeals => !State.SelectedTags.Any() ? State.Meals :
+	State.Meals.Where(m => State.SelectedTags.All(t => m.Tags.Any(mt => mt.Id == t.Id)));
+
+	protected override async Task OnInitializedAsync()
+	{
+		if (!State.Meals.Any())
+		{
+			State.Meals = await BellyBoxData.GetMeals();
+			State.Tags = await BellyBoxData.GetTags();
+		}
+	}
+}

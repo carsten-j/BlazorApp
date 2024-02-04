@@ -1,0 +1,25 @@
+﻿@inherits TestContext
+
+@code
+{
+    [Fact(DisplayName = "Simple Alert Render Test")]
+    public void Pill_TextTest()
+    {
+        // Arrange
+        var cut = Render(@<Pill Text="Test text"></Pill>);
+        // Act
+        // ... (as needed)
+        // Assert
+        cut.MarkupMatches(@<span>Test text</span>);
+    }
+
+
+    [Theory]
+    [InlineData("Red")]
+    public void Pill_StyleTest(string color)
+    {
+        var cut = Render(@<Pill Color="Red" Text="Test text"></Pill>);
+
+        cut.Find("span").GetAttribute("style").Should().Be($"background-color:{color}");
+    }
+}

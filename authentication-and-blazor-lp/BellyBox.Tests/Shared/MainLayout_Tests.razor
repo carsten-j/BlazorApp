@@ -1,0 +1,32 @@
+﻿@inherits TestContext
+@using BellyBox.Client.Shared
+
+@code {
+
+	[Fact(DisplayName ="MainLayout renders correctly")]
+	public void MainlayoutShouldRender()
+	{
+		var cut = Render(
+						@<MainLayout>
+							<Body>
+								<p>Body Content</p>
+							</Body>
+						</MainLayout>);
+		cut.MarkupMatches(
+						@<main>
+							<header>
+								<h1>BellyBox</h1>
+								<!-- Navigation -->
+								<NavMenu />
+							</header>
+							<section class="content">
+								<p>Body Content</p>
+							</section>
+							<footer>
+								<p>BellyBox &copy;</p>
+							</footer>
+						</main>
+						);
+	}
+
+}

@@ -1,0 +1,29 @@
+main {
+    height: 100vh;
+    display:grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    background-color: var(--primary-color);
+    color: var(--primary-contrast-color);
+    padding: 1rem;
+}
+
+section.content {
+    padding: 3rem;
+}
+
+h1 {
+    margin:0;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    background-color: var(--secondary-color);
+    color: var(--secondary-contrast-color);
+}

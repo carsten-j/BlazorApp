@@ -1,0 +1,21 @@
+﻿<div class="@AlertClass">
+	@ChildContent
+</div>
+
+@code {
+
+	[Parameter]
+	public RenderFragment ChildContent { get; set; }
+
+	[Parameter]
+	public AlertStatus Status { get; set; }
+	
+	string AlertClass => Status.ToString().ToLowerInvariant();
+
+	public enum AlertStatus
+	{
+		Info,
+		Warning,
+		Danger
+	}
+}

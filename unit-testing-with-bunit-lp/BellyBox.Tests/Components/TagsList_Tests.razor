@@ -1,0 +1,28 @@
+﻿@using AutoFixture.Xunit2
+@inherits TestContext
+
+@code
+{
+
+    [Fact]
+    public void TagList_Test()
+    {
+        var cut = Render(@<TagList Tags="@(new List<BellyBox.Shared.Tag>())"></TagList>);
+
+        cut.MarkupMatches(@"<div class=""tags""></div>");
+    }
+
+    [Theory, AutoData]
+    public void TagList_Pill_Test(List<BellyBox.Shared.Tag> tags)
+    {
+        var cut = Render(@<TagList Tags="@tags"></TagList>);
+
+        var pills = cut.FindComponents<Pill>();
+
+        var expected = tags.Select(x => x.Text);
+
+        var result = pills.Select(x => x.Instance.Text);
+
+        result.Should().BeEquivalentTo(expected);
+    }
+}

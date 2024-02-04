@@ -1,0 +1,23 @@
+﻿@if (CustomerCart.Items.Values.Any(x => x.Meal.Id == Meal.Id))
+{
+    <Alert Status="Alert.AlertStatus.Info">
+        <p>This item is in your <a href="/cart">cart</a>.</p>
+    </Alert>
+}
+<button class="primary" @onclick="() => HandleAddToCart(Meal)">Add to cart</button>
+
+@code {
+    [CascadingParameter]
+    public CartState CustomerCart { get; set; }
+
+    [Parameter]
+    public Meal Meal { get; set; }
+
+    [Parameter]
+    public EventCallback<Meal> OnAddToCart { get; set; }
+
+    public async Task HandleAddToCart(Meal meal)
+    {
+        await OnAddToCart.InvokeAsync(meal);
+    }
+}

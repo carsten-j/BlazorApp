@@ -1,0 +1,13 @@
+﻿@if (Show)
+{
+	<div class="no-records">
+		<Alert Status="Alert.AlertStatus.Info">
+			<span>Sorry, no meals are available for these filters.</span>
+		</Alert>
+	</div>
+}
+
+@code {
+	[Parameter]
+	public bool Show { get; set; }
+}

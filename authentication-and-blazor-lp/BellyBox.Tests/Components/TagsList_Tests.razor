@@ -1,0 +1,20 @@
+﻿@inherits TestContext
+@using AutoFixture.Xunit2
+@using BellyBox.Shared
+@code {
+
+	[Fact(DisplayName ="Empty TagList renders wrapper element")]
+	public void TagListShouldRender(){
+		var cut = Render(@<TagList Tags="new List<Tag>()"/>);
+		cut.MarkupMatches(@<div class="tags"></div>);
+	}
+
+	[Theory(DisplayName ="TagList renders pills"), AutoData]
+	public void TagListShouldRenderPills(List<Tag> tags)
+	{
+		var cut = Render(@<TagList Tags="tags"/>);
+		cut.FindComponents<Pill>()
+		.Select(p => p.Instance.Text).Should().BeEquivalentTo(
+			tags.Select(t => t.Text));
+	}
+}

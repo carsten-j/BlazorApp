@@ -1,0 +1,26 @@
+﻿@page "/cart"
+
+<CartGridView OnCartRemoveItem="@HandleCartRemoveItem" OnCartUpdateQuantity="@HandleCartUpdateQuantity" Data="CustomerCart.Items.Values">
+</CartGridView>
+
+@code {
+    [CascadingParameter]
+    public CartState CustomerCart { get; set; }
+
+    [Inject]
+    public ICartDataService CartService { get; set; }
+
+    public async Task HandleCartRemoveItem(int cartItemId)
+    {
+        await CartService.RemoveCartItemById(cartItemId);
+
+        CustomerCart.RemoveCartItem(cartItemId);
+    }
+
+    public async Task HandleCartUpdateQuantity(CartItem item)
+    {
+        var res = await CartService.UpdateCartItemQuantity(CustomerCart.CartId, CustomerCart.OwnerId, item);
+
+        CustomerCart.UpdateCart(res);
+    }
+}

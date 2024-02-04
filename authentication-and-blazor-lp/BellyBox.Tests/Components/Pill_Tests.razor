@@ -1,0 +1,18 @@
+﻿@inherits TestContext
+@code {
+	[Fact(DisplayName ="Pill rendres text value")]
+	public void PillShouldRenderTextValue() {
+		var cut = Render(@<Pill Text="Hello"/> );
+
+		cut.MarkupMatches(@<span>Hello</span> );
+	}
+
+	[Fact(DisplayName ="Pill rendres color attribute")]
+	public void PillShouldRenderColorAttribute()
+	{
+		var cut = Render(@<Pill Text="Hello" Color="blue"/> );
+
+		cut.Find("span").GetAttribute("style").Should().Be("background-color:blue");
+	}
+
+}

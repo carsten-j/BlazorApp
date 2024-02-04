@@ -1,0 +1,27 @@
+﻿article {
+    width: 1170px;
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 3rem;
+    margin: auto;
+}
+
+img {
+    max-width: 100%;
+}
+
+p.calories, p.servings {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid gray;
+}
+
+    p.calories span:first-of-type, p.servings span:first-of-type {
+        font-weight: 600;
+    }
+
+.sensitivities {
+    display: flex;
+    flex-direction:row;
+    gap:5px;
+} 

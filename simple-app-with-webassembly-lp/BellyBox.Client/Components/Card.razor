@@ -1,0 +1,19 @@
+﻿<div class="card">
+    <a href="@Url">
+        <img src="@Image" />
+        <p class="title">@Title</p>
+        <div class="content">
+            @ChildContent
+        </div>
+    </a>
+</div>
+
+
+@code
+{
+    [Parameter] public string Url { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Image { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+}
+

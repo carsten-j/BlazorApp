@@ -1,0 +1,40 @@
+﻿@using AutoFixture.Xunit2
+@using BellyBox.Shared
+ 
+@inherits TestContext
+
+@code
+{
+    [Theory, AutoData]
+    public void TagFilter_Test(List<Tag> tags)
+    {
+        var cut = Render(@<TagsFilter Tags="@tags"></TagsFilter>);
+
+        var ulist = cut.FindAll("ul>li");
+
+        ulist.Count().Should().Be(tags.Count());
+
+        int index = 0;
+        foreach (var ul in ulist)
+        {
+            ul.MarkupMatches($@"<li><input type=""checkbox"" id=""{tags[index].Id}""  >
+                              <label for=""{tags[index].Id}"" >{tags[index].Text}</label</li>");
+            index++;
+        }
+    }
+
+    [Theory, AutoData]
+    public void TagFilterSelected_Test(List<Tag> tags)
+    {
+        List<Tag> selected = new();
+
+        var cut = Render(@<TagsFilter Tags="@tags" @bind-SelectedFilters="@selected"></TagsFilter>);
+
+        var input = cut.Find("input");
+
+        input.Change(new ChangeEventArgs());
+
+        selected.Count().Should().Be(1);
+        selected.First().Should().Be(tags.First());
+    }
+}

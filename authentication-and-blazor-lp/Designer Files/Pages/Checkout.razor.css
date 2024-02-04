@@ -1,0 +1,27 @@
+﻿::deep form {
+    display: grid;
+    grid-template-columns: 8fr 4fr;
+    gap: 2rem;
+}
+
+h3 {
+    grid-column: 1/-1;
+}
+
+fieldset {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    border: none;
+    border-top: 2px inset var(--info-color);
+}
+
+label {
+    padding: 10px;
+    justify-self:right;
+}
+
+input {
+    padding: 10px;
+}
+

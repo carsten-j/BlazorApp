@@ -1,0 +1,11 @@
+﻿div {
+    margin: auto;
+    display: grid;
+    grid-template-columns: auto minmax(min-content, 1170px);
+    gap: 3rem;
+    width: max-content;
+}
+
+h1 {
+    grid-column: 1 / -1;
+}

@@ -1,0 +1,34 @@
+﻿@page "/cart"
+@using BellyBox.Client.Services
+@using BellyBox.Client.Components.CartGrid
+@inject ICartDataService CartService
+
+<CartGridView Data="CustomerCart.Items.Values" 
+                OnCartRemoveItem="HandleCartRemoveItem" 
+                OnCartUpdateQuantity="HandleCartUpdateQuantity"/>
+
+@code {
+
+    [CascadingParameter]
+    public CartState CustomerCart { get; set; } = null!;
+
+    async Task HandleCartRemoveItem(int itemId)
+    {
+        await CartService.RemoveCartItemById(itemId);
+        CustomerCart.RemoveCartItem(itemId);
+    }
+
+    async Task HandleCartUpdateQuantity(CartItem item)
+    {
+        var updatedItem = await CartService.UpdateCartItemQuantity(CustomerCart.CartId, CustomerCart.OwnerId, item);
+        if(updatedItem.Quantity < 1)
+        {
+            CustomerCart.RemoveCartItem(item.Id);
+        }
+        else
+        {
+            CustomerCart.UpdateCart(updatedItem);
+        }
+    }
+
+}

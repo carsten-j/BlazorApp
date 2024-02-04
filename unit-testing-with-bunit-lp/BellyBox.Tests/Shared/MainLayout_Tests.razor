@@ -1,0 +1,26 @@
+﻿@inherits TestContext
+
+@code
+{
+    [Fact]
+    public void Navmenu_Test()
+    {
+        // Arrange
+        var cut = Render(@<MainLayout><Body>
+    <p>Body Content</p></Body></MainLayout>);
+
+        cut.MarkupMatches(@<main>
+    <header>
+        <h1>BellyBox</h1>
+        <!-- Navigation -->
+        <NavMenu />
+    </header>
+    <section class="content">
+        <p>Body Content</p>
+    </section>
+    <footer>
+        <p>BellyBox &copy;</p>
+    </footer>
+</main>);
+    }
+}

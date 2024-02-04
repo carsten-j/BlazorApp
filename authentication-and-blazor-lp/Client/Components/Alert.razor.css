@@ -1,0 +1,22 @@
+﻿div {
+    display: flex;
+    width: 100%;
+    padding: 1rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+}
+
+    div.info {
+        background-color: var(--info-color);
+        color: var(--info-contrast-color);
+    }
+
+    div.warning {
+        background-color: var(--warning-color);
+        color: var(--warning-contrast-color);
+    }
+
+    div.danger {
+        background-color: var(--danger-color);
+        color: var(--danger-contrast-color);
+    }

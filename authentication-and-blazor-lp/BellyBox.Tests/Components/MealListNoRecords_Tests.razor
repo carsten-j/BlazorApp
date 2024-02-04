@@ -1,0 +1,20 @@
+﻿@inherits TestContext
+@code {
+	[Fact(DisplayName = "MealListNoRecords should render message")]
+	public void MealListViewNoRecordsShouldRenderMessage()
+	{
+		var cut = Render(@<MealListViewNoRecords Show="true" />);
+		cut.MarkupMatches(
+	@<div class="no-records">
+		<Alert Status="Alert.AlertStatus.Info">
+			<span>Sorry, no meals are available for these filters.</span>
+		</Alert>
+	</div>);
+	}
+
+	[Fact]
+	public void MealListViewNoRecordsShouldHide() {
+		var cut = Render(@<MealListViewNoRecords Show="false" />);
+		cut.MarkupMatches(string.Empty);
+	}
+}

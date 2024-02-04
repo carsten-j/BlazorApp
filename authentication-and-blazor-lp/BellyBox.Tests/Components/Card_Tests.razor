@@ -1,0 +1,23 @@
+﻿@using AutoFixture.Xunit2
+@inherits TestContext
+
+@code {
+    
+	[Theory(DisplayName ="Card should render with parameters"), AutoData]
+	public void CardShouldRenderParameters(string title, string image, string url, string childContent) {
+		
+		var cut = Render(@<Card Title="@title" Image="@image" Url="@url">
+							<span>@childContent</span>
+						  </Card>);
+
+		cut.MarkupMatches(@<div class="card">
+								<a href="@url">
+									<img src="@image" />
+									<p class="title">@title</p>
+									<div class="content">
+										<span>@childContent</span>
+									</div>
+								</a>
+							</div>);
+	}
+}

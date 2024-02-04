@@ -1,0 +1,13 @@
+﻿@implements IDisposable
+@using BellyBox.Client.Services
+<span class="cart-count">@CustomerCart.TotalItems</span>
+
+@code {
+
+    [CascadingParameter]
+    public CartState CustomerCart { get; set; } = null!;
+
+    protected override void OnInitialized() => CustomerCart.OnChange += StateHasChanged;
+
+    public void Dispose() => CustomerCart.OnChange -= StateHasChanged;
+}

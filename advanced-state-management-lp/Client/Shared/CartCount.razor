@@ -1,0 +1,20 @@
+﻿@implements IDisposable
+
+<span class="cart-count">
+    @(CustomerCart.TotalItems())
+</span>
+
+@code {
+    [CascadingParameter]
+    public CartState CustomerCart { get; set; }
+
+    protected override void OnInitialized()
+    {
+        CustomerCart.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        CustomerCart.OnChange -= StateHasChanged;
+    }
+}
